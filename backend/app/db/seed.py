@@ -13,6 +13,7 @@ DEFAULT_WORKFLOWS = [
         "category": "finance",
         "risk_level": "medium",
         "requires_approval": False,
+        "schedule_cron": "*/15 * * * *",
     },
     {
         "slug": "vendor-risk-escalation",
@@ -21,6 +22,7 @@ DEFAULT_WORKFLOWS = [
         "category": "procurement",
         "risk_level": "high",
         "requires_approval": True,
+        "schedule_cron": "0 * * * *",
     },
     {
         "slug": "lead-enrichment-and-routing",
@@ -29,6 +31,7 @@ DEFAULT_WORKFLOWS = [
         "category": "revenue",
         "risk_level": "low",
         "requires_approval": False,
+        "schedule_cron": None,
     },
     {
         "slug": "contract-renewal-safeguard",
@@ -37,6 +40,7 @@ DEFAULT_WORKFLOWS = [
         "category": "legal",
         "risk_level": "high",
         "requires_approval": True,
+        "schedule_cron": "0 */4 * * *",
     },
 ]
 
