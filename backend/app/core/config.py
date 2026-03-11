@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     request_timeout_seconds: float = 10.0
     max_budget_per_run_usd: float = 5.0
     n8n_simulation_mode: bool = True
+    otel_enabled: bool = True
+    otel_service_name: str = "ai-automation-command-center-backend"
+    otlp_endpoint: str = "http://otel-collector:4317"
 
     default_admin_email: str = "admin@command-center.io"
     default_admin_password: str = "ChangeMe!123"
