@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.db.models import AuditEvent, InboundEvent, RunStatus, User, Workflow, WorkflowRun
 from app.schemas.run import WorkflowRunResponse
+from app.services.redaction import redact_payload
 from app.services.signing import payload_hash
 from app.workers.queue import get_queue
 from app.workers.tasks import process_workflow_run
@@ -63,7 +64,7 @@ def create_run_from_event(
         trigger_type=source,
         status=RunStatus.queued,
         idempotency_key=idempotency_key,
-        input_payload=payload,
+        input_payload=redact_payload(payload),
         started_at=datetime.now(timezone.utc),
     )
     db.add(run)

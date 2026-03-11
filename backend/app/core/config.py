@@ -25,6 +25,11 @@ class Settings(BaseSettings):
 
     webhook_signing_secret: str = "replace-webhook-secret"
     rate_limit_per_minute: int = 120
+    max_retries: int = 2
+    retry_backoff_seconds: float = 0.8
+    request_timeout_seconds: float = 10.0
+    max_budget_per_run_usd: float = 5.0
+    n8n_simulation_mode: bool = True
 
     default_admin_email: str = "admin@command-center.io"
     default_admin_password: str = "ChangeMe!123"

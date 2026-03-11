@@ -11,6 +11,7 @@ from app.db.models import (
     ApprovalRequest,
     ApprovalStatus,
     AuditEvent,
+    DeadLetterEvent,
     RunStatus,
     Workflow,
     WorkflowRun,
@@ -19,6 +20,7 @@ from app.db.session import SessionLocal
 from app.schemas.agent import AgentExecutionRequest, ToolContract, ToolParameter
 from app.services.agents.manager import AgentService
 from app.services.n8n_client import N8NClient
+from app.services.redaction import redact_payload
 
 
 def _to_utc(value: datetime) -> datetime:
@@ -73,6 +75,29 @@ def _request_human_approval(db: Session, run: WorkflowRun) -> None:
     )
 
 
+def _mark_dead_letter(db: Session, run: WorkflowRun, reason: str, payload: dict[str, Any]) -> None:
+    db.add(
+        DeadLetterEvent(
+            run_id=run.id,
+            reason=reason,
+            payload_json=redact_payload(payload),
+        )
+    )
+    run.status = RunStatus.failed
+    run.error_message = reason
+    run.completed_at = datetime.now(timezone.utc)
+    db.add(
+        AuditEvent(
+            actor="system",
+            actor_role="service",
+            action="workflow.run.dead_lettered",
+            entity_type="workflow_run",
+            entity_id=run.id,
+            metadata_json={"reason": reason},
+        )
+    )
+
+
 def _execute_operational_action(db: Session, run: WorkflowRun, agent_payload: dict[str, Any]) -> RunStatus:
     n8n_client = N8NClient()
     orchestration_payload = {
@@ -92,18 +117,22 @@ def _execute_operational_action(db: Session, run: WorkflowRun, agent_payload: di
             action_type="n8n.workflow.trigger",
             target=run.workflow.slug,
             status=action_status,
-            details_json={
-                "agent_provider": agent_payload.get("provider", "unknown"),
-                "agent_cost_usd": agent_payload.get("cost_usd", 0.0),
-                "n8n": n8n_result,
-            },
+            details_json=redact_payload(
+                {
+                    "agent_provider": agent_payload.get("provider", "unknown"),
+                    "agent_cost_usd": agent_payload.get("cost_usd", 0.0),
+                    "n8n": n8n_result,
+                }
+            ),
         )
     )
 
-    run.output_payload = {
+    run.output_payload = redact_payload(
+        {
         "agent": agent_payload,
         "n8n": n8n_result,
-    }
+        }
+    )
     run.status = RunStatus.success if action_status == "success" else RunStatus.failed
     run.completed_at = datetime.now(timezone.utc)
     if run.started_at and run.completed_at:
@@ -168,6 +197,16 @@ def process_workflow_run(run_id: str) -> None:
             run.output_payload = {"agent": agent_result.model_dump()}
             run.estimated_cost_usd = agent_result.cost_usd
 
+            if float(agent_result.cost_usd) > settings.max_budget_per_run_usd:
+                _mark_dead_letter(
+                    db,
+                    run,
+                    f"Budget guardrail exceeded ({agent_result.cost_usd} > {settings.max_budget_per_run_usd})",
+                    {"agent_result": agent_result.model_dump()},
+                )
+                db.commit()
+                return
+
             if _requires_approval(run):
                 _request_human_approval(db, run)
             else:
@@ -176,18 +215,11 @@ def process_workflow_run(run_id: str) -> None:
         except Exception as exc:
             agent_task.status = RunStatus.failed
             agent_task.error_message = str(exc)
-            run.status = RunStatus.failed
-            run.error_message = str(exc)
-            run.completed_at = datetime.now(timezone.utc)
-            db.add(
-                AuditEvent(
-                    actor="system",
-                    actor_role="service",
-                    action="workflow.run.failed",
-                    entity_type="workflow_run",
-                    entity_id=run.id,
-                    metadata_json={"error": str(exc)},
-                )
+            _mark_dead_letter(
+                db,
+                run,
+                str(exc),
+                {"run_input": run.input_payload, "workflow_slug": run.workflow.slug},
             )
 
         db.commit()
