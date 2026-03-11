@@ -115,7 +115,11 @@ class AgentTask(TimestampMixin, Base):
     __tablename__ = "agent_tasks"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
-    run_id: Mapped[str] = mapped_column(ForeignKey("workflow_runs.id", ondelete="CASCADE"), index=True)
+    run_id: Mapped[str | None] = mapped_column(
+        ForeignKey("workflow_runs.id", ondelete="CASCADE"),
+        index=True,
+        nullable=True,
+    )
     status: Mapped[RunStatus] = mapped_column(SqlEnum(RunStatus), default=RunStatus.queued)
     provider: Mapped[str] = mapped_column(String(60), default="openai")
     model: Mapped[str] = mapped_column(String(80), default="gpt-5-mini")
@@ -124,7 +128,7 @@ class AgentTask(TimestampMixin, Base):
     attempts: Mapped[int] = mapped_column(Integer, default=0)
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    run: Mapped[WorkflowRun] = relationship(back_populates="agent_tasks")
+    run: Mapped[WorkflowRun | None] = relationship(back_populates="agent_tasks")
 
 
 class ApprovalRequest(TimestampMixin, Base):
