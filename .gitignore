@@ -21,6 +21,7 @@ __pycache__/
 backend/.venv/
 backend/.coverage
 backend/htmlcov/
+backend/*.db
 
 # Build
 coverage/
