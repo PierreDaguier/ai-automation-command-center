@@ -1,0 +1,25 @@
+name: Bug Report
+description: Report a defect
+title: "fix: "
+labels:
+  - type:bug
+  - priority:P0
+body:
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: Expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: Include steps, payloads, and logs.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Impact
+      description: User/business impact and scope.
+    validations:
+      required: true
