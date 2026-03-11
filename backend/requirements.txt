@@ -1,2 +1,11 @@
-fastapi==0.116.1
-uvicorn[standard]==0.35.0
+fastapi==0.135.1
+uvicorn[standard]==0.41.0
+sqlalchemy==2.0.48
+psycopg[binary]==3.2.12
+pydantic-settings==2.13.1
+email-validator==2.3.0
+redis==7.1.0
+python-jose[cryptography]==3.5.0
+slowapi==0.1.9
+prometheus-fastapi-instrumentator==7.1.0
+httpx==0.28.1
