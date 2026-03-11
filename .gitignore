@@ -22,6 +22,9 @@ __pycache__/
 backend/.venv/
 backend/.coverage
 backend/htmlcov/
+*.db
+*.sqlite
+*.sqlite3
 backend/*.db
 
 # Build
