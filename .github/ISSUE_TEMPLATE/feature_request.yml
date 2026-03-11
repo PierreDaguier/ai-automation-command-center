@@ -1,0 +1,31 @@
+name: Feature Request
+description: Track a product or engineering enhancement
+title: "feat: "
+labels:
+  - type:feature
+  - priority:P1
+body:
+  - type: textarea
+    attributes:
+      label: Problem
+      description: What business problem are we solving?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposal
+      description: What should be built?
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Area
+      options:
+        - area:frontend
+        - area:backend
+        - area:infra
+        - area:observability
+        - area:ux
+        - area:security
+    validations:
+      required: true
