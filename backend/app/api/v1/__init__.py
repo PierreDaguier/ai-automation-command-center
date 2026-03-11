@@ -1,1 +1,1 @@
-__all__ = ["agent", "approvals", "auth", "system", "triggers", "workflows"]
+__all__ = ["agent", "approvals", "audit", "auth", "logs", "system", "triggers", "workflows"]
