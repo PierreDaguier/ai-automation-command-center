@@ -1,0 +1,105 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: aacc
+      POSTGRES_USER: aacc
+      POSTGRES_PASSWORD: aacc
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  n8n:
+    image: n8nio/n8n:1.111.0
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      N8N_BASIC_AUTH_ACTIVE: "false"
+    volumes:
+      - n8n-data:/home/node/.n8n
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://aacc:aacc@postgres:5432/aacc
+      REDIS_URL: redis://redis:6379/0
+      N8N_BASE_URL: http://n8n:5678
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OTLP_ENDPOINT: http://otel-collector:4317
+      ENABLE_METRICS: "true"
+    depends_on:
+      - postgres
+      - redis
+      - n8n
+      - otel-collector
+
+  worker:
+    build:
+      context: ./backend
+    command: ["rq", "worker", "workflow-runs", "-u", "redis://redis:6379/0"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://aacc:aacc@postgres:5432/aacc
+      REDIS_URL: redis://redis:6379/0
+      N8N_BASE_URL: http://n8n:5678
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      - backend
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
+    depends_on:
+      - backend
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.135.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./infra/otel/otel-collector-config.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "4317:4317"
+
+  prometheus:
+    image: prom/prometheus:v3.7.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:12.3.0
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+
+volumes:
+  postgres-data:
+  redis-data:
+  n8n-data:
+  grafana-data:

@@ -9,7 +9,7 @@ from slowapi.middleware import SlowAPIMiddleware
 from app.api.v1.auth import limiter
 from app.api.v1.router import api_router
 from app.core.config import settings
-from app.core.observability import setup_metrics
+from app.core.observability import setup_metrics, setup_tracing
 from app.db.base import Base
 from app.db.seed import seed_defaults
 from app.db.session import SessionLocal, engine
@@ -51,6 +51,7 @@ def on_startup() -> None:
 
 
 setup_metrics(app)
+setup_tracing(app, engine)
 app.include_router(api_router, prefix=settings.api_v1_prefix)
 
 
