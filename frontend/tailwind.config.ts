@@ -9,16 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       boxShadow: {
-        glow: "0 0 0 1px rgba(120,255,214,0.18), 0 12px 40px rgba(4,12,26,0.45)",
+        glow: "0 0 0 1px rgba(98,255,155,0.2), 0 12px 40px rgba(3,10,8,0.56)",
       },
       colors: {
-        ink: "#0a0f1a",
-        panel: "#12192a",
-        edge: "#25314a",
-        accent: "#78ffd6",
-        signal: "#6ca8ff",
-        warning: "#ffcc66",
-        danger: "#ff6f6f",
+        ink: "#050b08",
+        panel: "#0f1713",
+        edge: "#26382f",
+        accent: "#62ff9b",
+        signal: "#ffd47a",
+        warning: "#ffbf66",
+        danger: "#ff7a88",
       },
     },
   },

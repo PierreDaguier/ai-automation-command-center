@@ -21,7 +21,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#070b12] via-[#0c1422] to-[#08101c] text-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#050b08] via-[#0b140f] to-[#090f0c] text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-[1440px] flex-col lg:flex-row">
         <aside className="border-b border-edge bg-panel/85 px-4 py-4 backdrop-blur lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
           <div className="flex items-center gap-3 px-2 py-2">
@@ -30,7 +30,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
             <div>
               <p className="font-semibold tracking-wide">AI Automation</p>
-              <p className="text-xs text-slate-400">Command Center</p>
+              <p className="text-xs text-slate-400">Governed Ops Console</p>
             </div>
           </div>
 

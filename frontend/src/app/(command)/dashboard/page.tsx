@@ -37,10 +37,10 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard title="Success Rate" value={percent(kpis.success_rate)} accent="#78ffd6" />
-        <MetricCard title="P95 Latency" value={ms(kpis.p95_latency_ms)} accent="#6ca8ff" />
-        <MetricCard title="Cost Per Run" value={currency(kpis.cost_per_run_usd)} accent="#ffcc66" />
-        <MetricCard title="Failed Runs" value={`${kpis.failed_runs}`} accent="#ff6f6f" />
+        <MetricCard title="Success Rate" value={percent(kpis.success_rate)} accent="#62ff9b" />
+        <MetricCard title="P95 Latency" value={ms(kpis.p95_latency_ms)} accent="#ffd47a" />
+        <MetricCard title="Cost Per Run" value={currency(kpis.cost_per_run_usd)} accent="#ffbf66" />
+        <MetricCard title="Failed Runs" value={`${kpis.failed_runs}`} accent="#ff7a88" />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
