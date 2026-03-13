@@ -10,7 +10,7 @@ const sample = {
 
 export default function DemoPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#070b12] via-[#0c1422] to-[#08101c] px-4 py-10 text-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#050b08] via-[#0b140f] to-[#090f0c] px-4 py-10 text-slate-100">
       <div className="mx-auto max-w-6xl space-y-6">
         <header className="rounded-2xl border border-edge bg-panel/70 p-6 shadow-glow">
           <p className="text-xs uppercase tracking-[0.22em] text-accent">Production Demo Snapshot</p>
@@ -21,10 +21,10 @@ export default function DemoPage() {
         </header>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <MetricCard title="Success Rate" value={percent(sample.success_rate)} accent="#78ffd6" />
-          <MetricCard title="P95 Latency" value={ms(sample.p95_latency_ms)} accent="#6ca8ff" />
-          <MetricCard title="Cost Per Run" value={currency(sample.cost_per_run_usd)} accent="#ffcc66" />
-          <MetricCard title="Failed Runs" value={`${sample.failed_runs}`} accent="#ff6f6f" />
+          <MetricCard title="Success Rate" value={percent(sample.success_rate)} accent="#62ff9b" />
+          <MetricCard title="P95 Latency" value={ms(sample.p95_latency_ms)} accent="#ffd47a" />
+          <MetricCard title="Cost Per Run" value={currency(sample.cost_per_run_usd)} accent="#ffbf66" />
+          <MetricCard title="Failed Runs" value={`${sample.failed_runs}`} accent="#ff7a88" />
         </section>
       </div>
     </div>

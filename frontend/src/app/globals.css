@@ -14,11 +14,11 @@ body {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 10% 10%, rgba(99, 179, 255, 0.2), transparent 32%),
-    radial-gradient(circle at 80% 0%, rgba(102, 255, 212, 0.14), transparent 35%),
-    #060a12;
+    radial-gradient(circle at 10% 10%, rgba(98, 255, 155, 0.16), transparent 32%),
+    radial-gradient(circle at 82% 0%, rgba(255, 212, 122, 0.14), transparent 35%),
+    #050b08;
 }
 
 * {
-  border-color: #26314b;
+  border-color: #26382f;
 }
