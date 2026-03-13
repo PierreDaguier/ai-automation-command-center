@@ -96,10 +96,18 @@ npm run dev
 - `admin@command-center.io` / `ChangeMe!123`
 
 ## Screenshots and Demo GIF
-- Login: [docs/media/login.png](docs/media/login.png)
-- Authenticated dashboard: [docs/media/dashboard-auth.png](docs/media/dashboard-auth.png)
-- Mobile preview: [docs/media/demo-mobile.png](docs/media/demo-mobile.png)
-- Demo GIF: [docs/media/demo.gif](docs/media/demo.gif)
+
+### Login
+![Login](docs/media/login.png)
+
+### Authenticated Dashboard
+![Authenticated Dashboard](docs/media/dashboard-auth.png)
+
+### Mobile Preview
+![Mobile Preview](docs/media/demo-mobile.png)
+
+### Demo GIF
+![AI Automation Demo](docs/media/demo.gif)
 
 ## 7-Minute Client Walkthrough
 - [docs/walkthrough-7-minutes.md](docs/walkthrough-7-minutes.md)
